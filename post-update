@@ -1,0 +1,9 @@
+#!/usr/bin/python
+# MIT License
+# 2015 www.codeChick.it Buk! Buk!
+
+import imp
+dep = imp.load_source('deployment', '/home/gitdev/git-res/deployment.py')
+
+deployment = dep.Deployment()
+deployment.deploy()
