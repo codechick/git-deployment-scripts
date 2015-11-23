@@ -53,7 +53,7 @@ You have to manually copy these three files:
     - Copy them into each repository under the proper `hooks` directory
 
 ## Configuration
-### deployments.py
+### deployment.py
 attributes can be modified straightforward in the class, otherwise you can simply override them at the end of the file by writing
 
     Deployment.<attr_name> = <preferred-val>
@@ -64,20 +64,9 @@ The configurable values are:
 + `srv_docs_path`: the path where the symlink towards the _production_ or the _backup_ is placed (usually `/var/www`)
 + `print_prefix`: fashion mannerism. It's the prefix placed on all the script outputs
 
-### post-update
+### post-update and pre-receive
++ `deployment_script_path`: the path where the deployment.py is placed so as to load and use it.
 
 
-### pre-receive
-
-# Just set the class attributes you need, otherwise modify the class itself. It's up to you
-#
-
-Deployment.deployments_dir
-
-
-#Deployment.branch
-
- = 'deploy_test'
-srv_docs_path = os.path.abspath(os.path.join(os.sep, 'var','www','test'))
-print_prefix = 'TMB> '
-'''
+## Copyright
+2015 codeChick.it - matteo@codechick.it. MIT license
