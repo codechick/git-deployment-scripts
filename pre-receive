@@ -7,4 +7,8 @@ deployment_script_path = os.path.abspath(os.path.join(os.sep, 'home','gitdev','g
 
 dep = imp.load_source('deployment', deployment_script_path)
 deployment = dep.Deployment()
+
+# Deployment's overrides here
+
+
 deployment.pre_deploy()

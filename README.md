@@ -67,6 +67,24 @@ The configurable values are:
 ### post-update and pre-receive
 + `deployment_script_path`: the path where the deployment.py is placed so as to load and use it.
 
+Some configurations are automatically set, but the user can override them once the deployment instance object is
+ instantiated. A comment in both scripts tells you where to place these overrides:
+
+ E.g.:
+    deployment = dep.Deployment()
+
+    # Deployment's overrides here
+    deployment.site_name = 'buk'
+
+ The overridable attributes are:
+ + site_name
+ + git_work_tree
+ + shr_dir
+ + bck_dir
+ + srv_site_path
+
+ Please read Deployment's code in case you don't understand what they stand for. It's auto-explicative.
+
 
 ## Copyright
 2015 codeChick.it - matteo@codechick.it. MIT license
