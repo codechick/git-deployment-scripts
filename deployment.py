@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # MIT License
-# 2015 www.codeChick.it Coqueek!
+# 2015 www.codeChick.it Buk! Buk!
 
 import os
 import re
@@ -355,9 +355,3 @@ class Deployment:
             #because of a git bug, you have to execute git-submodule inside the work_treee, notwithstanding the --work-tree parameter
             self.__cmd_prefix = "cd %s; " % self.git_work_tree
             self.__cmd_prefix += "git --git-dir=%s --work-tree=%s " % (self.git_dir, self.git_work_tree)
-
-
-
-
-# dep = Deployment()
-# dep.deploy()
