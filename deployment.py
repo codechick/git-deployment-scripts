@@ -157,13 +157,19 @@ class Deployment:
             self.__print('Checkout done')
             return True
         else:
-            self.__print('Stashing met some errors. Proceding anyway', 'ERR')
+            self.__print('Checkout met some errors. Proceding anyway', 'ERR')
             return False
 
     def __unstash_it(self):
         self.__print('Unstashing...')
-        cmd = self.__cmd_prefix + 'stash pop'
+        cmd = self.__cmd_prefix + 'stash show'
+        exit_code = subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
 
+        if exit_code > 0:
+            self.__print('No stashing to apply. Skipping...')
+            return True
+
+        cmd = self.__cmd_prefix + 'stash pop'
         exit_code = subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
 
         if exit_code == 0:
