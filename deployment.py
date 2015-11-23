@@ -104,6 +104,23 @@ class Deployment:
         return True
 
 
+    def __create_missing_stash_files(self, path):
+        '''This method is used for creating stashing files in each submodule folder.
+        It iterates the modules folders and add the stash file in case it\'s missing'''
+        modules_dir = os.path.join(self.git_dir, 'modules')
+
+        for dir_path, subdir_list, file_list in os.walk(modules_dir, True):
+            dir_name = os.path.basename(os.path.normpath(dir_path))
+
+            if dir_name == 'refs':
+                if 'stash' not in file_list:
+                    stash_file_path = os.path.join(dir_path, 'stash')
+                    f = open(stash_file_path, 'w')
+                    f.close()
+
+        return True
+
+
     def __backup_actual_site(self):
         self.__print('Creating the new backup')
 
@@ -152,6 +169,8 @@ class Deployment:
         cmd += self.__cmd_prefix + 'submodule update;'
 
         exit_code = subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
+
+        self.__create_missing_stash_files()
 
         if exit_code == 0:
             self.__print('Checkout done')
