@@ -97,6 +97,9 @@ class Deployment:
 
             if not os.path.exists(self.git_work_tree):
                 os.makedirs(self.git_work_tree)
+
+            if not os.path.exists(self.shr_dir):
+                os.makedirs(self.shr_dir)
         except:
             self.__print('Some errors have occoured while initializing the missing structure.', 'ERR')
             return False
@@ -191,10 +194,12 @@ class Deployment:
             subdir_list[:] = []
 
             symlink_path = os.path.join(self.git_work_tree, os.path.relpath(dir_path, self.shr_dir))
-            os.remove(symlink_path)
+            if os.path.exists(symlink_path):
+                os.remove(symlink_path)
 
             symlink_path = os.path.join(self.bck_dir, os.path.relpath(dir_path, self.shr_dir))
-            os.remove(symlink_path)
+            if os.path.exists(symlink_path):
+                os.remove(symlink_path)
 
         self.__print('Unlinked.')
         return True

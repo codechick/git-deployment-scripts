@@ -2,6 +2,7 @@
 # MIT License
 # 2015 www.codeChick.it Buk! Buk!
 import imp
+import os
 
 deployment_script_path = os.path.abspath(os.path.join(os.sep, 'home','gitdev','git-res', 'deployment.py'))
 
