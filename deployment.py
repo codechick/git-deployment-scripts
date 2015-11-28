@@ -18,7 +18,7 @@ class Deployment:
                     'clear'   : '\033[0m'
                 }
     deployments_dir = os.path.abspath(os.path.join(os.sep, 'var', 'deployments'))
-    branch = 'deploy_test'
+    branch = 'master'
     srv_docs_path = os.path.abspath(os.path.join(os.sep, 'var','www','test'))
     print_prefix = 'TMB> '
 
@@ -40,7 +40,7 @@ class Deployment:
         try:
             if op == 'save':
                 self.__print('Stashing all the modules...')
-                cmd = self.__cmd_prefix + "submodule foreach 'git stash save -u';"
+                cmd = self.__cmd_prefix + "submodule foreach 'git stash save --all';"
                 exit_code = subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
             else:
                 self.__print('Reapplying stash to the modules...')
