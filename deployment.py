@@ -10,6 +10,11 @@ import distutils.dir_util
 import errno
 import sys
 
+import pwd
+
+import grp
+
+
 class Deployment:
     'It automatizes the deployment from a bare repository to the deployment space.'
     __colors =    {
@@ -18,7 +23,9 @@ class Deployment:
                     'clear'   : '\033[0m'
                 }
     deployments_dir = os.path.abspath(os.path.join(os.sep, 'var', 'deployments'))
-    branch = 'master'
+    branch = 'deploy_test'
+    user_name = 'gitdev'
+    group_name = 'www-data'
     srv_docs_path = os.path.abspath(os.path.join(os.sep, 'var','www','test'))
     print_prefix = 'TMB> '
 
@@ -258,22 +265,34 @@ class Deployment:
         self.__print('*' * len(head), prefix='')
 
 
-    def __change_permissions(self, paths=None, mode=0775):
+    def __change_permissions(self, paths=None, mode_dirs=0775, mode_file=0775):
         'mode parameter is intended as an octal value (leading 0 is needed)'
         if paths is None:
             paths = [self.git_work_tree, self.bck_dir]
         elif isinstance(paths, list):
             paths = [paths]
 
-        self.__print('Changing the permissions to %s...' % mode)
+        self.__print('Changing the owner to \'%s\' for files and dirs...' % self.user_name)
+        self.__print('Changing the permissions to %s for files and to %s for dirs...' % (mode_file, mode_dirs))
 
         for path in paths:
             self.__print('Changing to %s' % path)
             for root, dirs, files in os.walk(path, topdown=False):
                 for dir in [os.path.join(root,d) for d in dirs]:
-                    os.chmod(dir, mode)
-            for file in [os.path.join(root, f) for f in files]:
-                os.chmod(file, mode)
+                    try:
+                        os.chown(dir, self.__uid, self.__gid)
+                        os.chmod(dir, mode_dirs)
+                    except OSError as e:
+                        if e.errno == 1:
+                            pass
+
+                for file in [os.path.join(root, f) for f in files]:
+                    try:
+                        os.chown(file, self.__uid, self.__gid)
+                        os.chmod(file, mode_file)
+                    except OSError as e:
+                        if e.errno == 1:
+                            pass
 
         self.__print('Permissions changed.')
 
@@ -348,6 +367,8 @@ class Deployment:
         self.site_name = None
         self.git_work_tree = None
         self.bck_dir = None
+        self.__uid = pwd.getpwnam(self.user_name).pw_uid
+        self.__gid = grp.getgrnam(self.group_name).gr_gid
 
         match_git_dir = re.search(r'.*/(.*).git$',self.git_dir)
         if match_git_dir:
