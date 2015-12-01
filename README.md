@@ -28,8 +28,8 @@ E.g.
 shr contains the `img` dir: `/var/deployments/kumi/shr/img`.
 When the website is deployed, both the _backup_ and the _production_ versions will point to that img-folder, sharing it:
 
-`/var/deployments/kumi/b/img -> /var/deployments/kumi/shr/img`
-`/var/deployments/kumi/p/img -> /var/deployments/kumi/shr/img`
+    /var/deployments/kumi/b/img -> /var/deployments/kumi/shr/img
+    /var/deployments/kumi/p/img -> /var/deployments/kumi/shr/img
 
 ### Modified production files are kept
 Did you modify the production version under `/var/deployments/kumi/p/`? Nein, nein, nein! The script takes care of it
@@ -58,10 +58,19 @@ attributes can be modified straightforward in the class, otherwise you can simpl
 
     Deployment.<attr_name> = <preferred-val>
 
+by modifiying `deployment.py` all the projects will have those values. You can also modify some values on a project basis 
+by placing the overrides **both** in `pre-receive` and `post-updated` located in each repository hook folder. The right
+place to put your overrides are marked by a comment:
+
+    # Deployment's overrides here
+    deployment.<attr_name> = <preferred-val>
+
 The configurable values are:
 + `deployments_dir`: it is the directory where the _sharing dir_, the _production_ and the _sharing_ are kept
 + `branch`: the branch that will be checked out
 + `srv_docs_path`: the path where the symlink towards the _production_ or the _backup_ is placed (usually `/var/www`)
++ `user_name`: both *backup* and *production* deployments (b and p folders) will have this UNIX user. Useful for srv execution purposes
++ `group_name`: both *backup* and *production* deployments (b and p folders) will have this UNIX group. Useful for srv execution purposes
 + `print_prefix`: fashion mannerism. It's the prefix placed on all the script outputs
 
 ### post-update and pre-receive

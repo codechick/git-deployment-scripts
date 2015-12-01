@@ -232,7 +232,7 @@ class Deployment:
                     os.remove(symlink_path)
                     os.symlink(dir_path, symlink_path)
                 else:
-                    self._print('An unexpected error occoured while creating the symlinks', 'ERR')
+                    self.__print('An unexpected error occoured while creating the symlinks ', 'ERR')
                     return False
 
             symlink_path = os.path.join(self.bck_dir, os.path.relpath(dir_path, self.shr_dir))
